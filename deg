@@ -1,0 +1,20 @@
+import Data.List
+import Data.List.Split
+
+-- Given a list of nodes and edges, return the degree for each node
+degree :: [Int] -> [(Int, Int)] -> [Int]
+degree nodes edges = map (\x -> length $ filter (\(a, b) -> x == a || x == b) edges) nodes
+
+main :: IO ()
+main = do
+  -- Read input from standard input
+  input <- getContents
+  let linesInput = lines input
+      -- Parse the number of nodes (n) and edges (e)
+      (n : _) = map read (words $ head linesInput) :: [Int]
+      -- Parse the edges
+      edges = map (\ln -> let [a, b] = map read (words ln) in (a, b)) (tail linesInput) :: [(Int, Int)]
+      -- Calculate the degrees of all nodes
+      result = degree [1..n] edges
+  -- Output the result as space-separated values
+  putStrLn $ unwords (map show result)
