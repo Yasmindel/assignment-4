@@ -1,0 +1,27 @@
+import networkx as nx
+
+def bfs_shortest_path():
+    with open("rosalind_bfs.txt") as f:
+        # Read number of nodes and edges
+        n, m = map(int, f.readline().strip().split())
+        # Read edges and create a list of tuples
+        edge_list = [tuple(map(int, line.strip().split())) for line in f.readlines()]
+
+    # Create a directed graph
+    G = nx.DiGraph()
+    G.add_nodes_from(range(1, n + 1))  # Add nodes
+    G.add_edges_from(edge_list)       # Add edges
+
+    # Compute shortest path lengths from node 1
+    shortest_paths = nx.single_source_shortest_path_length(G, 1)
+
+    # Create result array, defaulting to -1 for unreachable nodes
+    result = [-1] * n
+    for node, dist in shortest_paths.items():
+        result[node - 1] = dist  # Adjust for 1-based indexing
+
+    # Print the result as space-separated values
+    print(" ".join(map(str, result)))
+
+if __name__ == "__main__":
+    bfs_shortest_path()
