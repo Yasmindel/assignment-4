@@ -1,0 +1,12 @@
+def tree():
+    # Read the input file
+    lines = open("rosalind_tree.txt").read().splitlines()
+    n = int(lines[0])  # Number of nodes
+    e = len(lines) - 1  # Number of edges (remaining lines represent edges)
+
+    # The minimum number of edges to make the graph a tree is:
+    # n - e - 1 (nodes - current edges - 1)
+    return n - e - 1
+
+if __name__ == "__main__":
+    print(tree())
