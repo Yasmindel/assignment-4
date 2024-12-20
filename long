@@ -1,0 +1,54 @@
+def read_fasta(filename):
+    """Reads a FASTA file and returns a list of sequences."""
+    with open(filename) as file:
+        fasta_data = file.read().strip().split('>')
+        sequences = []
+        for entry in fasta_data[1:]:
+            lines = entry.splitlines()
+            sequence = ''.join(lines[1:])
+            sequences.append(sequence)
+        return sequences
+
+def overlap(s, t):
+    """Finds the length of the maximum overlap between the suffix of s and the prefix of t."""
+    max_overlap = 0
+    for i in range(1, len(s) + 1):
+        if t.startswith(s[-i:]):
+            max_overlap = i
+    return max_overlap
+
+def shortest_superstring(sequences):
+    """Constructs the shortest superstring containing all sequences."""
+    while len(sequences) > 1:
+        max_overlap = -1
+        best_pair = None
+        merged_string = ""
+
+        # Find the pair of sequences with the maximum overlap
+        for i in range(len(sequences)):
+            for j in range(len(sequences)):
+                if i != j:
+                    overlap_len = overlap(sequences[i], sequences[j])
+                    if overlap_len > max_overlap:
+                        max_overlap = overlap_len
+                        best_pair = (i, j)
+                        merged_string = sequences[i] + sequences[j][overlap_len:]
+
+        # Merge the best pair
+        i, j = best_pair
+        sequences.pop(j)  # Remove second sequence (index j comes after i)
+        sequences.pop(i)  # Remove first sequence
+        sequences.append(merged_string)
+
+    return sequences[0]
+
+def main():
+    # Read the input file
+    sequences = read_fasta("rosalind_long.txt")
+
+    # Construct and print the shortest superstring
+    result = shortest_superstring(sequences)
+    print(result)
+
+if __name__ == "__main__":
+    main()
