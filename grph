@@ -1,0 +1,26 @@
+def read_fasta(filename):
+    """Reads a FASTA file and returns a list of tuples (header, sequence)."""
+    with open(filename) as file:
+        fasta_data = file.read().strip().split('>')
+        records = []
+        for entry in fasta_data[1:]:
+            lines = entry.splitlines()
+            header = lines[0]
+            sequence = ''.join(lines[1:])
+            records.append((header, sequence))
+        return records
+
+def grph():
+    k = 3  # Length of overlap
+    recs = read_fasta("rosalind_grph.txt")
+    
+    # Compare each pair of sequences for k-length overlap
+    for ena in recs:
+        for enb in recs:
+            if ena == enb:
+                continue
+            if ena[1][-k:] == enb[1][:k]:  # Suffix of ena matches prefix of enb
+                print(ena[0], enb[0])
+
+if __name__ == "__main__":
+    grph()
