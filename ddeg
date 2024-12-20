@@ -1,0 +1,24 @@
+import networkx as nx
+
+def ddeg():
+    # Read the input file
+    with open("rosalind_ddeg.txt") as f:
+        n, m = map(int, f.readline().strip().split())  # Number of vertices and edges
+        edges = [tuple(map(int, line.strip().split())) for line in f]
+
+    # Create the graph
+    G = nx.Graph()
+    G.add_nodes_from(range(1, n + 1))  # Add nodes 1 through n
+    G.add_edges_from(edges)  # Add edges from the file
+
+    # Compute the sum of neighbors' degrees for each node
+    result = []
+    for node in G.nodes():
+        neighbor_degrees_sum = sum(G.degree(neighbor) for neighbor in G.neighbors(node))
+        result.append(neighbor_degrees_sum)
+
+    # Print the result as a space-separated string
+    print(" ".join(map(str, result)))
+
+if __name__ == "__main__":
+    ddeg()
